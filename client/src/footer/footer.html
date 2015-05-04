@@ -1,0 +1,29 @@
+<div id="footer"
+    data-ng-controller="FooterCtrl">
+    <div class="container">
+        <div class="footer-in">
+            <ul>
+                <li data-ng-class="{active: viewState.state == 'main.livefeed'}">
+                    <a data-ui-sref="main.livefeed">
+                        <em><img src="images/foot1.png" width="65" height="44" alt=""></em>
+                        <span>Live Feed</span>
+                    </a>
+                </li>
+                <li data-ng-class="{active: viewState.state == 'main.tour'}">
+                    <a data-ui-sref="main.tour">
+                        <em><img src="images/foot2.png" width="34" height="44" alt=""></em>
+                        <span>Tour</span>
+                    </a>
+                </li>
+                <li data-ng-class="{active: viewState.state == 'main.profile'}">
+                    <a data-ui-sref="main.profile">
+                        <em><img src="images/foot3.png" width="42" height="44" alt=""></em>
+                        <span>Profile</span>
+                    </a>
+                </li>
+            </ul>
+            <span class="clear"></span>
+        </div>
+    </div>
+</div>
+
