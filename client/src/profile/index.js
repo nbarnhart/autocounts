@@ -6,8 +6,7 @@ module.exports = (function() {
         'markup',
     ]);
 
-    //mod.controller('LoginCtrl', require('./login-ctrl'));
-    //mod.controller('LogoutCtrl', require('./logout-ctrl'));
+    mod.controller('ProfileCtrl', require('./profile-ctrl'));
 
     return mod;
 

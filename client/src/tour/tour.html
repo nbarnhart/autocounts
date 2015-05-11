@@ -1,4 +1,5 @@
-<div class="maincontent">
+<div class="maincontent"
+    data-ng-controller="TourCtrl">
   <div class="page">
     <div class="data-table">
       <div class="title"><span class="shadow"></span>
@@ -20,32 +21,48 @@
         <span class="clear"></span> </div>
       <div class="info">
         <ul>
-          <li class="color">
+            <li data-ng-class="{color: $index % 2}"
+            data-ng-repeat="listing in viewState.listings track by $index"
+            data-ng-click="listing.showPercentages = !listing.showPercentages">
             <ul>
               <li class="table1">
-                <h6>16 Apr, 2015</h6>
+              <h6>
+                  <div>{{ listing.day }}</div>
+                  <div>{{listing.month}}</div>
+                  <div>{{listing.year}}</div>
+              </h6>
+                <!-- h6>16 Apr, 2015</h6 -->
               </li>
               <li class="table1">
-                <h6>Denver, CO</h6>
+              <h6><div style="word-break: normal">{{listing.city}}</div> <div>{{listing.state}}</div></h6>
               </li>
               <li class="table1">
-                <h6>240 / 1,050</h6>
+              <h6 data-ng-if="!listing.showPercentages">
+                  <div>{{listing.countNumerator}} / {{listing.countDenominator}}</div><div style="word-break: normal;padding-top:5px;">Gross {{listing.gross}}</div>
+              </h6>
+              <h6 data-ng-if="listing.showPercentages">
+                  <div>{{listing.countNumerator / listing.countDenominator * 100 | round}}%</div><div style="word-break: normal;padding-top:5px;">Gross {{listing.gross}}</div>
+              </h6>
               </li>
-              <li class="table1">
-                <h6><span class="arrow">45</span></h6>
+              <li data-ng-if="listing.changeFinal" class="table1">
+                <h6>Final</h6>
+              </li>
+              <li data-ng-if="!listing.changeFinal" class="table1">
+                <h6 data-ng-if="!listing.showPercentages"><span class="arrow">{{listing.change}}</span></h6>
+                <h6 data-ng-if="listing.showPercentages"><span class="arrow">{{listing.changePercent}}%</span></h6>
               </li>
             </ul>
             <span class="clear"></span> </li>
-          <li>
+          <!-- li>
             <ul>
               <li class="table1">
-                <h6>12 Apr, 2015</h6>
+                <h6><div>12</div> <div>Apr</div> <div>2015</div></h6>
               </li>
               <li class="table1">
-                <h6>Provo, UT</h6>
+                <h6><div style="word-break: normal">Provo</div> <div>UT</div></h6>
               </li>
               <li class="table1">
-                <h6>500 / 500</h6>
+              <h6><div>500 / 500</div><div style="word-break: normal;padding-top:5px;">Gross $300</div></h6>
               </li>
               <li class="table1">
                 <h6><span class="arrow">56</span></h6>
@@ -55,13 +72,13 @@
           <li class="color">
             <ul>
               <li class="table1">
-                <h6>8 Apr, 2015</h6>
+                <h6><div>8</div> <div>Apr</div> <div>2015</div></h6>
               </li>
               <li class="table1">
-                <h6>New York, NY</h6>
+                <h6><div style="word-break: normal;">New York</div> <div>NY</div></h6>
               </li>
               <li class="table1">
-                <h6>240 / 1,050</h6>
+                <h6><div>240 / 1,050</div><div style="word-break: normal;padding-top:5px;">Gross $300</div></h6>
               </li>
               <li class="table1">
                 <h6><span class="arrow">32</span></h6>
@@ -71,14 +88,13 @@
           <li>
             <ul>
               <li class="table1">
-                <h6>4 Apr, 2015</h6>
+                <h6><div>4</div> <div>Apr</div> <div>2015</div></h6>
               </li>
               <li class="table1">
-                <h6>Los Angeles,
-                  CA</h6>
+                <h6><div style="word-break: normal;">Los Angeles</div> <div>CA</div></h6>
               </li>
               <li class="table1">
-                <h6>245 / 300</h6>
+                <h6><div>245 / 300</div><div style="word-break: normal;padding-top:5px;">Gross $300</div></h6>
               </li>
               <li class="table1">
                 <h6><span class="arrow">25</span></h6>
@@ -88,13 +104,13 @@
           <li class="color">
             <ul>
               <li class="table1">
-                <h6>30 Mar, 2015</h6>
+                <h6><div>30</div> <div>Mar</div> <div>2015</div></h6>
               </li>
               <li class="table1">
-                <h6>Irvine, CA</h6>
+                <h6><div style="word-break: normal;">Irvine</div> <div>CA</div></h6>
               </li>
               <li class="table1">
-                <h6>240 / 1,050</h6>
+                <h6><div>240 / 1,050</div><div style="word-break: normal;padding-top:5px;">Gross $300</div></h6>
               </li>
               <li class="table1">
                 <h6><span class="arrow">20</span></h6>
@@ -104,13 +120,13 @@
           <li>
             <ul>
               <li class="table1">
-                <h6>18 MAr, 2015</h6>
+                <h6><div>18</div> <div>Mar</div> <div>2015</div></h6>
               </li>
               <li class="table1">
-                <h6>Denver, CO</h6>
+                <h6><div style="word-break: normal;">Denver</div> <div>CO</div></h6>
               </li>
               <li class="table1">
-                <h6>1400 / 1450</h6>
+                <h6><div>1400 / 1450</div><div style="word-break: normal;padding-top:5px;">Gross $300</div></h6>
               </li>
               <li class="table1">
                 <h6>Final</h6>
@@ -120,13 +136,13 @@
           <li class="color">
             <ul>
               <li class="table1">
-                <h6>3 MAr, 2015</h6>
+                <h6><div>3</div> <div>Mar</div> <div>2015</div></h6>
               </li>
               <li class="table1">
-                <h6>Irvine, CA</h6>
+                <h6><div style="word-break: normal;">Irvine</div> <div>CA</div></h6>
               </li>
               <li class="table1">
-                <h6>1200 / 1250</h6>
+                <h6><div>1200 / 1250</div><div style="word-break: normal;padding-top:5px;">Gross $300</div></h6>
               </li>
               <li class="table1">
                 <h6>Final</h6>
@@ -136,20 +152,19 @@
           <li>
             <ul>
               <li class="table1">
-                <h6>1 MAr, 2015</h6>
+                <h6><div>1</div> <div>Mar</div> <div>2015</div></h6>
               </li>
               <li class="table1">
-                <h6>Los Angeles,
-                  CA</h6>
+                <h6><div style="word-break: normal;">Los Angeles</div> <div>CA</div></h6>
               </li>
               <li class="table1">
-                <h6>800 / 800</h6>
+                <h6><div>800 / 800</div><div style="word-break: normal;padding-top:5px;">Gross $300</div></h6>
               </li>
               <li class="table1">
                 <h6>Final</h6>
               </li>
             </ul>
-            <span class="clear"></span> </li>
+            <span class="clear"></span> </li -->
         </ul>
       </div>
     </div>

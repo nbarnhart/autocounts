@@ -33,10 +33,14 @@ var app = angular.module('autocounts-app', [
     //Features
     require('./main/index').name,
     require('./footer/index').name,
+    require('./header/index').name,
     require('./login/index').name,
     require('./livefeed/index').name,
     require('./profile/index').name,
     require('./tour/index').name,
+    require('./tours/index').name,
+
+    require('./filters/index').name,
 
     //Templates
     'markup',
@@ -67,27 +71,45 @@ app.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function($st
                 templateUrl: '/livefeed/livefeed.html',
             },
             'header@main': {
-                templateUrl: '/livefeed/header.html'
+                templateUrl: '/header/header.html'
             },
             'footer@main': {
                 templateUrl: '/footer/footer.html'
             },
         }
     })
-    .state('main.tour', {
+    .state('main.tours', {
+        url: '/tours',
+        views: {
+            'content@main': { // targeting <div ui-view="content"/> in /main/main.html
+                templateUrl: '/tours/tours.html',
+            },
+            'header@main': {
+                templateUrl: '/header/header.html'
+            },
+            'footer@main': {
+                templateUrl: '/footer/footer.html'
+            },
+        }
+    })
+    .state('main.tours.tour', {
         url: '/tour',
+        params: {
+            tour: null,
+        },
         views: {
             'content@main': { // targeting <div ui-view="content"/> in /main/main.html
                 templateUrl: '/tour/tour.html',
             },
             'header@main': {
-                templateUrl: '/tour/header.html'
+                templateUrl: '/header/header.html'
             },
             'footer@main': {
                 templateUrl: '/footer/footer.html'
             },
         }
     })
+
     .state('main.profile', {
         url: '/profile',
         views: {
@@ -95,7 +117,7 @@ app.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function($st
                 templateUrl: '/profile/profile.html',
             },
             'header@main': {
-                templateUrl: '/profile/header.html'
+                templateUrl: '/header/header.html'
             },
             'footer@main': {
                 templateUrl: '/footer/footer.html'
@@ -111,7 +133,33 @@ app.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function($st
 
 
 
-},{"./footer/index":3,"./livefeed/index":4,"./login/index":6,"./main/index":9,"./profile/index":10,"./tour/index":11}],2:[function(require,module,exports){
+},{"./filters/index":2,"./footer/index":5,"./header/index":7,"./livefeed/index":8,"./login/index":10,"./main/index":13,"./profile/index":14,"./tour/index":16,"./tours/index":18}],2:[function(require,module,exports){
+'use strict';
+
+module.exports = (function() {
+
+    var mod = angular.module('filters', [
+    ]);
+
+    mod.filter('round', require('./round'));
+
+    return mod;
+
+})();
+
+},{"./round":3}],3:[function(require,module,exports){
+'use strict';
+
+module.exports = Round;
+
+function Round($filter) {
+    return function (input) {
+        if (isNaN(input)) return input;
+        return Math.round(input);
+    };
+}
+
+},{}],4:[function(require,module,exports){
 'use strict';
 
 module.exports = FooterCtrl;
@@ -126,14 +174,20 @@ FooterCtrl.$inject = [
 
 function FooterCtrl($scope, $rootScope, User,$location,$state) {
     $scope.viewState = {
-        selectedNavigation: ''
+        selectedNavigation: '',
+        showNav: false,
     };
+
     $scope.$on('$stateChangeSuccess', function() {
         $scope.viewState.state = $state.current.name;
     });
+
+    $scope.$on('toggleNav',function() {
+        $scope.viewState.showNav = !$scope.viewState.showNav;
+    });
 }
 
-},{}],3:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 
 module.exports = (function() {
@@ -148,7 +202,59 @@ module.exports = (function() {
 
 })();
 
-},{"./footer-ctrl":2}],4:[function(require,module,exports){
+},{"./footer-ctrl":4}],6:[function(require,module,exports){
+'use strict';
+
+module.exports = HeaderCtrl;
+
+HeaderCtrl.$inject = [
+    '$scope',
+    '$rootScope',
+    'User',
+    '$location',
+    '$state',
+];
+
+function HeaderCtrl($scope, $rootScope, User,$location,$state) {
+    $scope.viewState = {
+        header: '',
+    };
+    $scope.$on('headerUpdate', function(ev,headerInfo) {
+        console.log('headerUpdate: ',headerInfo);
+        $scope.viewState.header = headerInfo.header;
+        $scope.viewState.back = headerInfo.back;
+    });
+
+    $scope.toggleNav = function() {
+        $rootScope.$broadcast('toggleNav');
+    };
+
+    $scope.goBack = function() {
+        $state.transitionTo($rootScope.previousState);
+    };
+
+    $rootScope.$on('$stateChangeSuccess', function (ev, to, toParams, from, fromParams) {
+        $rootScope.previousState = from;
+    });
+
+}
+
+},{}],7:[function(require,module,exports){
+'use strict';
+
+module.exports = (function() {
+
+    var mod = angular.module('header', [
+        'markup',
+    ]);
+
+    mod.controller('HeaderCtrl', require('./header-ctrl'));
+
+    return mod;
+
+})();
+
+},{"./header-ctrl":6}],8:[function(require,module,exports){
 'use strict';
 
 module.exports = (function() {
@@ -164,7 +270,7 @@ module.exports = (function() {
 
 })();
 
-},{"./live-feed-ctrl":5}],5:[function(require,module,exports){
+},{"./live-feed-ctrl":9}],9:[function(require,module,exports){
 'use strict';
 
 module.exports = LiveFeedCtrl;
@@ -180,6 +286,10 @@ LiveFeedCtrl.$inject = [
 function LiveFeedCtrl($scope, $rootScope, User,$location,$state) {
     $scope.viewState = {};
 
+    $rootScope.$broadcast('headerUpdate',{
+        header: 'LIVE FEED'
+    });
+
     function enableFlip() {
         $('ul li:first-child').addClass('first');
         $('ul li:last-child').addClass('last');
@@ -193,7 +303,7 @@ function LiveFeedCtrl($scope, $rootScope, User,$location,$state) {
     enableFlip();
 }
 
-},{}],6:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict';
 
 module.exports = (function() {
@@ -209,7 +319,7 @@ module.exports = (function() {
 
 })();
 
-},{"./login-ctrl":7,"./logout-ctrl":8}],7:[function(require,module,exports){
+},{"./login-ctrl":11,"./logout-ctrl":12}],11:[function(require,module,exports){
 'use strict';
 
 module.exports = LoginCtrl;
@@ -261,7 +371,7 @@ function LoginCtrl($scope, $rootScope, User,$location,$state) {
     */
 }
 
-},{}],8:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
 
 module.exports = LogoutCtrl;
@@ -279,7 +389,7 @@ function LogoutCtrl($scope, User, $state) {
     };
 }
 
-},{}],9:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 'use strict';
 
 module.exports = (function() {
@@ -295,7 +405,7 @@ module.exports = (function() {
 
 })();
 
-},{}],10:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 'use strict';
 
 module.exports = (function() {
@@ -304,14 +414,35 @@ module.exports = (function() {
         'markup',
     ]);
 
-    //mod.controller('LoginCtrl', require('./login-ctrl'));
-    //mod.controller('LogoutCtrl', require('./logout-ctrl'));
+    mod.controller('ProfileCtrl', require('./profile-ctrl'));
 
     return mod;
 
 })();
 
-},{}],11:[function(require,module,exports){
+},{"./profile-ctrl":15}],15:[function(require,module,exports){
+'use strict';
+
+module.exports = ProfileCtrl;
+
+ProfileCtrl.$inject = [
+    '$scope',
+    '$rootScope',
+    'User',
+    '$location',
+    '$state',
+];
+
+function ProfileCtrl($scope, $rootScope, User,$location,$state) {
+    $scope.viewState = {};
+
+    $rootScope.$broadcast('headerUpdate',{
+        header: 'PROFILE'
+    });
+
+}
+
+},{}],16:[function(require,module,exports){
 'use strict';
 
 module.exports = (function() {
@@ -320,11 +451,186 @@ module.exports = (function() {
         'markup',
     ]);
 
-    //mod.controller('LoginCtrl', require('./login-ctrl'));
-    //mod.controller('LogoutCtrl', require('./logout-ctrl'));
+    mod.controller('TourCtrl', require('./tour-ctrl'));
 
     return mod;
 
 })();
+
+},{"./tour-ctrl":17}],17:[function(require,module,exports){
+'use strict';
+
+module.exports = TourCtrl;
+
+TourCtrl.$inject = [
+    '$scope',
+    '$rootScope',
+    'User',
+    '$location',
+    '$state',
+    '$stateParams',
+];
+
+function TourCtrl($scope, $rootScope, User,$location,$state,$stateParams) {
+    $scope.viewState = {
+        listings: [{
+            showPercentages: false,
+            day: '16',
+            month: 'Apr',
+            year: '2015',
+            city: 'Denver',
+            state: 'CO',
+            countNumerator: 240,
+            countDenominator: 1050,
+            gross: '$300',
+            change: 45,
+            changePercent:'10',
+            changeFinal: '',
+        },{
+            showPercentages: false,
+            day: '12',
+            month: 'Apr',
+            year: '2015',
+            city: 'Provo',
+            state: 'UT',
+            countNumerator: 500,
+            countDenominator: 500,
+            gross: '$300',
+            change: 56,
+            changePercent:'8',
+            changeFinal: '',
+        },{
+            showPercentages: false,
+            day: '8',
+            month: 'Apr',
+            year: '2015',
+            city: 'New York',
+            state: 'NY',
+            countNumerator: 240,
+            countDenominator: 1050,
+            gross: '$300',
+            change: 32,
+            changePercent:'15',
+            changeFinal: '',
+        },{
+            showPercentages: false,
+            day: '4',
+            month: 'Apr',
+            year: '2015',
+            city: 'Los Angeles',
+            state: 'CA',
+            countNumerator: 245,
+            countDenominator: 300,
+            gross: '$300',
+            change: 25,
+            changePercent:'2',
+            changeFinal: '',
+        },{
+            showPercentages: false,
+            day: '30',
+            month: 'Mar',
+            year: '2015',
+            city: 'Irvine',
+            state: 'CA',
+            countNumerator: 240,
+            countDenominator: 1050,
+            gross: '$300',
+            change: 20,
+            changePercent:'7',
+            changeFinal: '',
+        },{
+            showPercentages: false,
+            day: '18',
+            month: 'Mar',
+            year: '2015',
+            city: 'Denver',
+            state: 'CO',
+            countNumerator: 1400,
+            countDenominator: 1450,
+            gross: '$300',
+            change: 0,
+            changePercent:'0',
+            changeFinal: 'Final',
+        },{
+            showPercentages: false,
+            day: '3',
+            month: 'Mar',
+            year: '2015',
+            city: 'Irvine',
+            state: 'CA',
+            countNumerator: 1200,
+            countDenominator: 1250,
+            gross: '$300',
+            change: 0,
+            changePercent:'0',
+            changeFinal: 'Final',
+        },{
+            showPercentages: false,
+            day: '1',
+            month: 'Mar',
+            year: '2015',
+            city: 'Los Angeles',
+            state: 'CA',
+            countNumerator: 800,
+            countDenominator: 800,
+            gross: '$300',
+            change: 0,
+            changePercent:'0',
+            changeFinal: 'Final',
+        }]
+
+    };
+
+
+
+    $rootScope.$broadcast('headerUpdate',{
+        header: $stateParams.tour,
+        back: true
+    });
+
+}
+
+},{}],18:[function(require,module,exports){
+'use strict';
+
+module.exports = (function() {
+
+    var mod = angular.module('tours', [
+        'markup',
+    ]);
+
+    mod.controller('ToursCtrl', require('./tours-ctrl'));
+
+    return mod;
+
+})();
+
+},{"./tours-ctrl":19}],19:[function(require,module,exports){
+'use strict';
+
+module.exports = ToursCtrl;
+
+ToursCtrl.$inject = [
+    '$scope',
+    '$rootScope',
+    'User',
+    '$location',
+    '$state',
+];
+
+function ToursCtrl($scope, $rootScope, User,$location,$state) {
+    $scope.viewState = {
+        tours: ['Courtney Love','Beach Boys','Beyoncé','Boys II Men'],
+    };
+
+    $rootScope.$broadcast('headerUpdate',{
+        header: 'TOURS',
+    });
+
+    $scope.goToTour = function(tour){
+        $state.transitionTo('main.tours.tour',{tour: tour});
+    };
+
+}
 
 },{}]},{},[1]);

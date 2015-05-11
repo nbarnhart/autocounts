@@ -13,6 +13,10 @@ LiveFeedCtrl.$inject = [
 function LiveFeedCtrl($scope, $rootScope, User,$location,$state) {
     $scope.viewState = {};
 
+    $rootScope.$broadcast('headerUpdate',{
+        header: 'LIVE FEED'
+    });
+
     function enableFlip() {
         $('ul li:first-child').addClass('first');
         $('ul li:last-child').addClass('last');

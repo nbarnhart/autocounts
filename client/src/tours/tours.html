@@ -1,0 +1,30 @@
+<div class="maincontent"
+    data-ng-controller="ToursCtrl">
+    <div class="page">
+        <div class="data-table tours">
+            <div class="title"><span class="shadow"></span>
+                <ul>
+                    <li class="table1">
+                        <h6>Artist</h6>
+                    </li>
+                </ul>
+                <span class="clear"></span> </div>
+                <div class="info">
+                <ul>
+                    <li data-ng-class="{color: $index % 2}"
+                        data-ng-repeat="tour in viewState.tours track by $index"
+                        data-ng-click="goToTour(tour)">
+                        <ul>
+                            <li class="table1">
+                                <h6>{{tour}}</h6>
+                            </li>
+                        </ul>
+                        <span class="clear"></span> 
+                    </li>
+                    <li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -12,9 +12,15 @@ FooterCtrl.$inject = [
 
 function FooterCtrl($scope, $rootScope, User,$location,$state) {
     $scope.viewState = {
-        selectedNavigation: ''
+        selectedNavigation: '',
+        showNav: false,
     };
+
     $scope.$on('$stateChangeSuccess', function() {
         $scope.viewState.state = $state.current.name;
+    });
+
+    $scope.$on('toggleNav',function() {
+        $scope.viewState.showNav = !$scope.viewState.showNav;
     });
 }

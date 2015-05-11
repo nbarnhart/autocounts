@@ -2,11 +2,11 @@
 
 module.exports = (function() {
 
-    var mod = angular.module('tour', [
+    var mod = angular.module('tours', [
         'markup',
     ]);
 
-    mod.controller('TourCtrl', require('./tour-ctrl'));
+    mod.controller('ToursCtrl', require('./tours-ctrl'));
 
     return mod;
 

@@ -1,6 +1,7 @@
 <div id="footer"
     data-ng-controller="FooterCtrl">
-    <div class="container">
+    <div class="container"
+        data-ng-class="{ 'show-nav': viewState.showNav, 'hide-nav': !viewState.showNav}">
         <div class="footer-in">
             <ul>
                 <li data-ng-class="{active: viewState.state == 'main.livefeed'}">
@@ -10,9 +11,9 @@
                     </a>
                 </li>
                 <li data-ng-class="{active: viewState.state == 'main.tour'}">
-                    <a data-ui-sref="main.tour">
+                    <a data-ui-sref="main.tours">
                         <em><img src="images/foot2.png" width="34" height="44" alt=""></em>
-                        <span>Tour</span>
+                        <span>Tours</span>
                     </a>
                 </li>
                 <li data-ng-class="{active: viewState.state == 'main.profile'}">

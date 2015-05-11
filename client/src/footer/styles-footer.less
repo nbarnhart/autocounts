@@ -1,0 +1,84 @@
+/* ------------------ FOOTER HERE --------------------------*/
+#footer {
+    position: fixed;
+    top: 40px;
+    left: 0;
+    width: 100%;
+
+    .container {
+        max-height: 79px;
+        overflow-y: hidden;
+        transition-property: all;
+        transition-duration: .5s;
+        transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+
+        &.show-nav {
+            max-height: 79px;
+        }
+
+        &.hide-nav {
+            max-height: 0px;
+        }
+    }
+}
+.footer-in {
+    background: #40a0de;
+    padding: 0;
+}
+#footer ul {
+    margin: 0 auto;
+    text-align: center;
+}
+#footer ul li {
+    text-align: center;
+    width: 33.33%;
+    float: left;
+}
+#footer ul li a {
+    display: block;
+    color: #ffffff;
+    font-size: 18px;
+    line-height: 18px;
+    margin: 0 10px;
+    position: relative;
+}
+#footer ul li a img {
+    margin: 15px auto 0;
+}
+#footer ul li a span {
+    display: block;
+    position: relative;
+    font-size: 18px;
+    line-height: 18px;
+    font-family: 'montserratbold';
+    text-transform: uppercase;
+    padding: 10px 0;
+}
+#footer ul li.active,
+#footer ul li:hover {
+    background: #2d85be;
+}
+
+
+@media screen and (min-width: 481px) and (max-width: 640px) {
+    #footer ul li a img {
+        height: 30px;
+        width: auto;
+    }
+    #footer ul li a span {
+        font-size: 14px;
+        line-height: 14px;
+    }
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+    #footer ul li a img {
+        height: 30px;
+        width: auto;
+    }
+    #footer ul li a span {
+        font-size: 14px;
+        line-height: 14px;
+    }
+
+}

@@ -1,0 +1,18 @@
+<div id="header"
+    data-ng-controller="HeaderCtrl">
+    <div class="container">
+        <div class="header-in">
+            <a data-ng-if="!viewState.back"
+                data-ng-click="toggleNav()"
+                class="menu-btn">
+                <img src="images/menu-btn.png" width="30" height="24" alt="">
+            </a>
+            <a data-ng-if="viewState.back"
+                data-ng-click="goBack()"
+                class="menu-btn back">
+                <img src="images/back-btn.png" width="30" height="24" alt="">
+            </a>
+            <h2>{{viewState.header}}</h2>
+        </div>
+    </div>
+</div>
